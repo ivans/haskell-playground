@@ -258,7 +258,7 @@ myInit args = do
    -- make the gears
    g1 <- defineNewList Compile $ do
       materialAmbientAndDiffuse Front $= Color4 0.8 0.1 0.0 1.0
-      gear 1 4 1 20 0.7
+      gear 1 4 1 30 0.7
 
    g2 <- defineNewList Compile $ do
       materialAmbientAndDiffuse Front $= Color4 0.0 0.8 0.2 1.0
@@ -285,20 +285,20 @@ visible _     NotVisible = idleCallback $= Nothing
 
 main :: IO ()
 main  = do
-  (_progName, args) <- getArgsAndInitialize
-  putStrLn $ "Starting program: " ++ _progName
-  putStrLn $ "Program args: " ++ _progName
-  initialDisplayMode $= [ RGBMode, WithDepthBuffer, DoubleBuffered ]
+   (_progName, args) <- getArgsAndInitialize
+   putStrLn $ "Starting program: " ++ _progName
+   putStrLn $ "Program args: " ++ _progName
+   initialDisplayMode $= [ RGBMode, WithDepthBuffer, DoubleBuffered ]
 
-  initialWindowPosition $= Position 0 0
-  initialWindowSize $= Size 640 480
-  _ <- createWindow "Gears"
-  state <- makeState
-  gearsAndAuto <- myInit args
+   initialWindowPosition $= Position 0 0
+   initialWindowSize $= Size 640 480
+   _ <- createWindow "Gears"
+   state <- makeState
+   gearsAndAuto <- myInit args
 
-  displayCallback $= draw gearsAndAuto state
-  reshapeCallback $= Just reshape
-  keyboardMouseCallback $= Just (keyboard state)
-  visibilityCallback $= Just (visible state)
+   displayCallback $= draw gearsAndAuto state
+   reshapeCallback $= Just reshape
+   keyboardMouseCallback $= Just (keyboard state)
+   visibilityCallback $= Just (visible state)
 
-  mainLoop
+   mainLoop
