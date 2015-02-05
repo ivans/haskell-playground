@@ -48,21 +48,27 @@ cabal-version:       >=1.10
 executable realworldhaskell
   -- .hs or .lhs file containing the Main module.
   main-is:             Realworldhaskell.hs
-  
   -- Modules included in this executable, other than Main.
   -- other-modules:       MyFunctions
-  
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:    
-  
   -- Other library packages from which modules are imported.
-  build-depends:       base >=4.6.0.1 && <4.8
-
-  
+  build-depends:       base >= 4.6.0.1 && < 4.8
   -- Directories containing source files.
   hs-source-dirs:      src
-  
   -- Base language which the package is written in.
+  default-language:    Haskell2010
+
+--executable Hello
+--  main-is:             Hello.hs
+--  build-depends:       base, GLUT
+--  hs-source-dirs:      src/OpenGL
+--  default-language:    Haskell2010
+
+executable Gears
+  main-is:             Gears.hs
+  build-depends:       base, GLUT
+  hs-source-dirs:      src/OpenGL
   default-language:    Haskell2010
 
 
