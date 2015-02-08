@@ -18,14 +18,14 @@ import Graphics.UI.GLUT
 -- in conjunction with the accwindow routine.
 j8 :: [Vector2 GLdouble]
 j8 = [
-   Vector2 (-0.334818)   0.435331 ,
-   Vector2   0.286438  (-0.393495),
-   Vector2   0.459462    0.141540 ,
-   Vector2 (-0.414498) (-0.192829),
-   Vector2 (-0.183790)   0.082102 ,
-   Vector2 (-0.079263) (-0.317383),
-   Vector2   0.102254    0.299133 ,
-   Vector2   0.164216  (-0.054399) ]
+   Vector2 (-1.334818)   1.435331 ,
+   Vector2   2.286438  (-2.393495),
+   Vector2   3.459462    3.141540 ,
+   Vector2 (-4.414498) (-4.192829),
+   Vector2 (-5.183790)   5.082102 ,
+   Vector2 (-6.079263) (-6.317383),
+   Vector2   7.102254    7.299133 ,
+   Vector2   8.164216  (-8.054399) ]
 
 -- The first 6 arguments are identical to the frustum call. pixD is anti-alias
 -- jitter in pixels. Use (Vector2 0 0) for no anti-alias jitter. eyeD is
@@ -88,6 +88,10 @@ myInit = do
    clearColor $= Color4 0 0 0 0
    clearAccum $= Color4 0 0 0 0
 
+-- Wireframe or Solid
+objectRenderFlavour :: Flavour
+objectRenderFlavour = Solid
+
 displayObjects :: IO ()
 displayObjects = do
    -- resolve overloading, not needed in "real" programs
@@ -98,29 +102,32 @@ displayObjects = do
       translatef (Vector3 0 0 (-5))
       rotatef 30 (Vector3 1 0 0)
 
-      preservingMatrix $ do
-         translatef (Vector3 (-0.80) 0.35 0)
-         rotatef 100 (Vector3 1 0 0)
-         materialDiffuse Front $= Color4 0.7 0.7 0 1
-         renderObject Solid (Torus 0.275 0.85 16 16)
+--      preservingMatrix $ do
+--         translatef (Vector3 (-0.80) 0.35 0)
+--         rotatef 100 (Vector3 1 0 0)
+--         materialDiffuse Front $= Color4 0.7 0.7 0 1
+--         renderObject objectRenderFlavour (Torus 0.275 0.85 16 16)
+--
+--      preservingMatrix $ do
+--         translatef (Vector3 (-0.75) (-0.50) 0)
+--         rotatef 45 (Vector3 0 0 1)
+--         rotatef 45 (Vector3 1 0 0)
+--         materialDiffuse Front $= Color4 0 0.7 0.7 1
+--         renderObject objectRenderFlavour (Cube 1.5)
+--
+--      preservingMatrix $ do
+--         translatef (Vector3 0.75 0.60 0)
+--         rotatef 30 (Vector3 1 0 0)
+--         materialDiffuse Front $= Color4 0.7 0 0.7 1
+--         renderObject objectRenderFlavour (Sphere' 1 16 16)
+--
+--      preservingMatrix $ do
+--         translatef (Vector3 0.70 (-0.90) 0.25)
+--         materialDiffuse Front $= Color4 0.7 0.4 0.4 1
+--         renderObject objectRenderFlavour Octahedron
 
       preservingMatrix $ do
-         translatef (Vector3 (-0.75) (-0.50) 0)
-         rotatef 45 (Vector3 0 0 1)
-         rotatef 45 (Vector3 1 0 0)
-         materialDiffuse Front $= Color4 0 0.7 0.7 1
-         renderObject Solid (Cube 1.5)
-
-      preservingMatrix $ do
-         translatef (Vector3 0.75 0.60 0)
-         rotatef 30 (Vector3 1 0 0)
-         materialDiffuse Front $= Color4 0.7 0 0.7 1
-         renderObject Solid (Sphere' 1 16 16)
-
-      preservingMatrix $ do
-         translatef (Vector3 0.70 (-0.90) 0.25)
-         materialDiffuse Front $= Color4 0.7 0.4 0.4 1
-         renderObject Solid Octahedron
+        renderObject objectRenderFlavour (SierpinskiSponge 5)
 
 -- display draws 5 teapots into the accumulation buffer several times; each time
 -- with a jittered perspective. The focal point is at z = 5.0, so the gold
@@ -147,8 +154,9 @@ reshape size = do
    viewport $= (Position 0 0, size)
 
 keyboard :: KeyboardMouseCallback
-keyboard (Char '\27') Down _ _ = exitWith ExitSuccess
-keyboard _            _    _ _ = return ()
+keyboard (Char '\27') Down _ _   = exitWith ExitSuccess
+keyboard (Char x)     Down _ pos = putStrLn $ "Key pressed " ++ show x ++ ", pos = " ++ show pos
+keyboard _            _    _ _   = return ()
 
 -- Main Loop: Be certain you request an accumulation buffer.
 main :: IO ()
